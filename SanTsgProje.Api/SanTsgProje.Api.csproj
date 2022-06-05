@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.25" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.25">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="3.1.25" />
+    <PackageReference Include="MimeKit" Version="3.2.0" />
+    <PackageReference Include="Serilog" Version="2.11.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SanTsgProje.Application\SanTsgProje.Application.csproj" />
+    <ProjectReference Include="..\SanTsgProje.Data\SanTsgProje.Data.csproj" />
+    <ProjectReference Include="..\SanTsgProje.Domain\SanTsgProje.Domain.csproj" />
+    <ProjectReference Include="..\SanTsgProje.Shared\SanTsgProje.Shared.csproj" />
+  </ItemGroup>
+
+
+</Project>

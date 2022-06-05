@@ -1,0 +1,36 @@
+﻿@model SanTsgProje.Domain.Users.User
+
+<form method="post">
+    <h1>Kullanıcı Kayıt</h1>
+    <div asp-validation-summary="All"></div>
+
+    
+    <div class="girisalani">
+        <label asp-for="UserName"></label>
+        <input asp-for="UserName" />
+        <span asp-validation-for="UserName"></span>
+
+    </div>
+    <div class="girisalani">
+        <label asp-for="Password"></label>
+        <input asp-for="Password" />
+        <span asp-validation-for="Password"></span>
+
+    </div>
+
+    <div class="girisalani">
+        <label asp-for="Email"></label>
+        <input asp-for="Email" />
+        <span asp-validation-for="Email"></span>
+    </div>
+    <button type="submit" class="kaydetmeButonu">Kaydet</button>
+    <button type="reset" class="kaydetmeButonu">Reset</button>
+    <a asp-controller="User" asp-action="Index">Listeye geri dön</a>
+</form>
+
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+
+}

@@ -1,0 +1,22 @@
+﻿@model SanTsgProje.Domain.Users.User
+
+<form method="post" asp-action="Delete">
+    <h1>Kullanıcıyı Sil</h1>
+
+    <input asp-for="Id" hidden />
+
+
+    <div class="girisalani">
+        <label asp-for="UserName"></label>
+        <input disabled asp-for="UserName" />
+    </div>
+    <button type="submit" class="kaydetmeButonu">Sil</button>
+    <a asp-controller="User" asp-action="Index">Listeye geri dön</a>
+</form>
+
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+
+}
