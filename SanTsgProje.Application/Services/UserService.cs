@@ -1,4 +1,5 @@
-﻿using SanTsgProje.Application.Interfaces;
+﻿using Microsoft.Extensions.Logging;
+using SanTsgProje.Application.Interfaces;
 using SanTsgProje.Application.Models;
 using SanTsgProje.Data;
 using SanTsgProje.Domain.Users;
@@ -11,11 +12,13 @@ namespace SanTsgProje.Application.Services
     {
         private readonly IEmailService _emailService;
         private readonly IUnitOfWork _unitOfWork;
-        public UserService(IEmailService emailService, IUnitOfWork unitOfWork)
+        private readonly ILogger<UserService> _logger;
+        public UserService(IEmailService emailService, IUnitOfWork unitOfWork, ILogger<UserService> logger)
         {
 
             _emailService = emailService;
             _unitOfWork = unitOfWork;
+            _logger = logger;
         }
         #region Crud With Unit Of Work
         //User Add
@@ -23,19 +26,22 @@ namespace SanTsgProje.Application.Services
         {
             _unitOfWork.User.Add(user);
             _unitOfWork.Complete();
+            _logger.LogInformation("Yeni kullanici eklendi.", user);
         }
 
         //User ChangeStatus
         public void ChangeStatus(int? id)
         {
-            var userStatus = _unitOfWork.User.Get(id);
-            if (userStatus.IsActive == true)
+            var user = _unitOfWork.User.Get(id);
+            if (user.IsActive == true)
             {
-                userStatus.IsActive = false;
+                user.IsActive = false;
+                _logger.LogInformation($"{user.UserName} adli kullanicinin statusu pasif durumuna getirildi.", user);
             }
-            else if (userStatus.IsActive == false)
+            else if (user.IsActive == false)
             {
-                userStatus.IsActive = true;
+                user.IsActive = true;
+                _logger.LogInformation($"{user.UserName} adli kullanicinin statusu aktif durumuna getirildi.", user);
             }
             _unitOfWork.Complete();
         }
@@ -44,6 +50,7 @@ namespace SanTsgProje.Application.Services
         {
             _unitOfWork.User.Update(user);
             _unitOfWork.Complete();
+            _logger.LogInformation($"{user.UserName} adli kullanicinin bilgileri degistirildi.", user);
         }
 
         //User Get
@@ -63,9 +70,10 @@ namespace SanTsgProje.Application.Services
         {
             _unitOfWork.User.Remove(user);
             _unitOfWork.Complete();
+            _logger.LogInformation($"{user.UserName} adli kullanici silindi.", user);
         }
         #endregion
-
+        #region Send Post
         //Send Post
         public async Task SendPost(User user)
         {
@@ -76,7 +84,10 @@ namespace SanTsgProje.Application.Services
                 ToEmail = user.Email
             };
             await _emailService.SendEmailAsync(mail);
+            _logger.LogInformation($"{user.UserName} adli kullaniciya posta gonderildi.", user);
         }
+        #endregion
+
 
     }
 
