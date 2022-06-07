@@ -8,6 +8,8 @@ using Microsoft.Extensions.Hosting;
 using SanTsgProje.Application.Interfaces;
 using SanTsgProje.Application.Services;
 using SanTsgProje.Data;
+using SanTsgProje.Data.Repositories;
+using SanTsgProje.Data.Repositories.Interfaces;
 using SanTsgProje.Shared.SettingsModels;
 using System;
 using System.Collections.Generic;
@@ -28,12 +30,17 @@ namespace SanTsgProje.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            
             services.AddControllersWithViews();
             services.AddDbContext<ProjeDbContext>(options =>
              options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
             services.AddScoped<IEmailService, EmailService>();
             services.AddTransient<IUserService, UserService>();
+            //services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            //services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            
         }
 
 
