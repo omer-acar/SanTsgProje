@@ -10,7 +10,7 @@ using SanTsgProje.Data;
 namespace SanTsgProje.Data.Migrations
 {
     [DbContext(typeof(ProjeDbContext))]
-    [Migration("20220602183021_SanTsgProje")]
+    [Migration("20220608101326_SanTsgProje")]
     partial class SanTsgProje
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,6 +20,24 @@ namespace SanTsgProje.Data.Migrations
                 .HasAnnotation("ProductVersion", "3.1.25")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("SanTsgProje.Domain.Authentications.TokenInfo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTimeOffset>("ExpiresOn")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Token")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TokenInfos");
+                });
 
             modelBuilder.Entity("SanTsgProje.Domain.Users.User", b =>
                 {

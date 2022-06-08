@@ -36,10 +36,15 @@ namespace SanTsgProje.Web
              options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
             services.AddScoped<IEmailService, EmailService>();
+
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<ISearchingService, SearchingService>();
+            services.AddTransient<IAuthenticationService, AuthenticationService>();
             //services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             //services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
             
         }
 

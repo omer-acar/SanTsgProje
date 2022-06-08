@@ -89,6 +89,6 @@ namespace SanTsgProje.Application.Services
         #endregion
 
 
-    }
+    } //Basic Crud opsions
 
 }

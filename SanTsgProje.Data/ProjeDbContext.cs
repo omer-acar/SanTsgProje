@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using SanTsgProje.Domain.Users;
+using SanTsgProje.Domain.Authentications;
 
 namespace SanTsgProje.Data
 {
@@ -13,6 +14,7 @@ namespace SanTsgProje.Data
 
         }
         public DbSet<User> Users { get; set; }
+        public DbSet<TokenInfo> TokenInfos { get; set; }
 
 
     }

@@ -11,7 +11,7 @@ namespace SanTsgProje.Domain.Users
         public string UserName { get; set; }
         public int Password { get; set; }
         public string Email { get; set; }
-        public DateTime DateOfSign { get; set; }=DateTime.Now.Date;
+        public DateTime DateOfSign { get; set; }=DateTime.Now;
         public Boolean IsActive { get; set; }= true;
 
     }

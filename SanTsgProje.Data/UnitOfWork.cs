@@ -9,6 +9,7 @@ namespace SanTsgProje.Data
     public interface IUnitOfWork
     {
         public IUserRepository User { get; }
+        public IAuthenticationRepository Authentication { get; }
         void Complete();
         void Dispose();
     }
@@ -17,12 +18,14 @@ namespace SanTsgProje.Data
         private readonly ProjeDbContext _context;
 
         public IUserRepository User { get; private set; }
+        public IAuthenticationRepository Authentication { get; private set; }
 
         public UnitOfWork(ProjeDbContext context)
         {
             _context = context;
 
             User = new UserRepository(context);
+            Authentication = new AuthenticationRepository(context);
         }
 
         public void Complete()
