@@ -29,6 +29,9 @@ namespace SanTsgProje.Data.Migrations
                     b.Property<DateTimeOffset>("ExpiresOn")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<TimeSpan>("RemainingTime")
+                        .HasColumnType("time");
+
                     b.Property<string>("Token")
                         .HasColumnType("nvarchar(max)");
 

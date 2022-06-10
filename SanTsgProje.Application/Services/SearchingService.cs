@@ -1,11 +1,15 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using SanTsgProje.Application.Interfaces;
 using SanTsgProje.Application.Models;
+using SanTsgProje.Application.Models.Requests;
+using SanTsgProje.Application.Models.Responses;
 using SanTsgProje.Data;
 using SanTsgProje.Domain.Authentications;
 using SanTsgProje.Domain.Users;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -18,51 +22,49 @@ namespace SanTsgProje.Application.Services
     {
         private readonly IUnitOfWork _unitOfWork;
 
+
         public SearchingService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
-         
-        public async Task<List<string>> Search(string query) //Searching 
+
+        public async Task<List<CityInfos>> SearchCities(string query) //Searching Cities 
         {
-            List<string> list = new List<string>();
+            List<CityInfos> list2 = new List<CityInfos>();
+
             //Token for header from database
             var tokentype = _unitOfWork.Authentication.GetById();
             var token = tokentype.Token;
+
             //Url for post api
             var url = "http://service.stage.paximum.com/v2/api/productservice/getarrivalautocomplete";
             var jsonSerializerOptions = new JsonSerializerOptions()
             {
                 PropertyNameCaseInsensitive = true,
             };
+
             //Post with httpclient
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var searchRequest = new SearchRequest() { ProductType = 2, Query = query, Culture = "en-US" };
+            var searchRequest = new SearchRequest() { Query = query, Culture = "en-US" };
             var response = await httpClient.PostAsJsonAsync(url, searchRequest);
+
             //If response is success filter for city
             if (response.IsSuccessStatusCode)
             {
-                var id = await response.Content.ReadAsStringAsync();
-                JObject json = JObject.Parse(id);
-                //Item select to each body in items and we founded array count
-                var items = json.SelectToken("body.items").Value<JArray>();
-                var uzun = items.Count;
-                for (int i = 0; i < uzun; i++)
-                {
-                    //We filtered TR and Cities
-                    var country = json.SelectToken($"body.items[{i}].country.id").Value<string>();
-                    var city = json.SelectToken($"body.items[{i}].city.name").Value<string>();
-                    if (country == "TR")
+                var read = await response.Content.ReadAsStringAsync();
+                SearchingResponse.Root deserializedProduct = JsonConvert.DeserializeObject<SearchingResponse.Root>(read);
+
+                //Item select to each body in items
+                foreach (var item in deserializedProduct.body.items)
+                {   if (item.country.id == "TR" && item.type==1)
                     {
-                        if ((list.IndexOf(city)) == -1)
-                        {
-                            list.Add(city);
-                        }
+                            list2.Add(new CityInfos(name: item.city.name, id: item.city.id, country: item.country.id));
                     }
                 }
+                
             }
-            return list;
+            return list2;
 
         }
     }

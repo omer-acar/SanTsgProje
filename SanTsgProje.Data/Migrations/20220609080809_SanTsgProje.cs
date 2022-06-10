@@ -14,7 +14,8 @@ namespace SanTsgProje.Data.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Token = table.Column<string>(nullable: true),
-                    ExpiresOn = table.Column<DateTimeOffset>(nullable: false)
+                    ExpiresOn = table.Column<DateTimeOffset>(nullable: false),
+                    RemainingTime = table.Column<TimeSpan>(nullable: false)
                 },
                 constraints: table =>
                 {

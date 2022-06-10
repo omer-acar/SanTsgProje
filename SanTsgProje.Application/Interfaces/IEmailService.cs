@@ -1,4 +1,4 @@
-﻿using SanTsgProje.Application.Models;
+﻿using SanTsgProje.Application.Models.Requests;
 using System;
 using System.Collections.Generic;
 using System.Text;

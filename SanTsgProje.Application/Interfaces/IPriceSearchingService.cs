@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace SanTsgProje.Application.Interfaces
 {
-    public interface ISearchingService
+    public interface IPriceSearchingService
     {
-        Task<List<CityInfos>> SearchCities(string query);
+        public Task<List<HotelInfos>> PriceSearch(string CityName);
     }
 }

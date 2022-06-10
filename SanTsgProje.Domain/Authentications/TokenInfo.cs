@@ -11,5 +11,6 @@ namespace SanTsgProje.Domain.Authentications
         public int Id { get; set; }
         public string Token { get; set; }
         public DateTimeOffset ExpiresOn { get; set; }
+        public TimeSpan RemainingTime { get; set; }
     }
 }

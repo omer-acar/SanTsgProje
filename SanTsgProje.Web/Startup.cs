@@ -43,6 +43,7 @@ namespace SanTsgProje.Web
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<ISearchingService, SearchingService>();
             services.AddTransient<IAuthenticationService, AuthenticationService>();
+            services.AddTransient<IPriceSearchingService, PriceSearchingService>();
             //services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             //services.AddScoped<IUserRepository, UserRepository>();
             

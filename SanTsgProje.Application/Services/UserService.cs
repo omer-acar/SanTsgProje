@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using SanTsgProje.Application.Interfaces;
-using SanTsgProje.Application.Models;
+using SanTsgProje.Application.Models.Requests;
 using SanTsgProje.Data;
 using SanTsgProje.Domain.Users;
 using System.Collections.Generic;
@@ -20,6 +20,7 @@ namespace SanTsgProje.Application.Services
             _unitOfWork = unitOfWork;
             _logger = logger;
         }
+        //Basic Crud opsions
         #region Crud With Unit Of Work
         //User Add
         public void Add(User user)
@@ -72,7 +73,8 @@ namespace SanTsgProje.Application.Services
             _unitOfWork.Complete();
             _logger.LogInformation($"{user.UserName} adli kullanici silindi.", user);
         }
-        #endregion
+        #endregion//Basic Crud opsions
+        //Send Post
         #region Send Post
         //Send Post
         public async Task SendPost(User user)
@@ -89,6 +91,6 @@ namespace SanTsgProje.Application.Services
         #endregion
 
 
-    } //Basic Crud opsions
+    } 
 
 }

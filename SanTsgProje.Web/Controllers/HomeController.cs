@@ -45,13 +45,14 @@ namespace SanTsgProje.Web.Controllers
             if (isTokenExpired == true)
             {
                 await _authentication.Authentication();
-                var result = await _searching.Search(Query);
+                var result = await _searching.SearchCities(Query);
                 return View(result);
 
             }
             else if (isTokenExpired == false)
             {
-                var result = await _searching.Search(Query);
+                var result = await _searching.SearchCities(Query);
+
                 return View(result);
             }
             return View();

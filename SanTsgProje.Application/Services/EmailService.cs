@@ -3,7 +3,7 @@ using MailKit.Security;
 using Microsoft.Extensions.Options;
 using MimeKit;
 using SanTsgProje.Application.Interfaces;
-using SanTsgProje.Application.Models;
+using SanTsgProje.Application.Models.Requests;
 using SanTsgProje.Shared.SettingsModels;
 using System;
 using System.Collections.Generic;
@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace SanTsgProje.Application.Services
 {
-        public class EmailService : IEmailService
+    public class EmailService : IEmailService
     {
         private readonly EmailSettings _emailSettings;
 

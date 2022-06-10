@@ -10,7 +10,7 @@ using SanTsgProje.Data;
 namespace SanTsgProje.Data.Migrations
 {
     [DbContext(typeof(ProjeDbContext))]
-    [Migration("20220608101326_SanTsgProje")]
+    [Migration("20220609080809_SanTsgProje")]
     partial class SanTsgProje
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -30,6 +30,9 @@ namespace SanTsgProje.Data.Migrations
 
                     b.Property<DateTimeOffset>("ExpiresOn")
                         .HasColumnType("datetimeoffset");
+
+                    b.Property<TimeSpan>("RemainingTime")
+                        .HasColumnType("time");
 
                     b.Property<string>("Token")
                         .HasColumnType("nvarchar(max)");

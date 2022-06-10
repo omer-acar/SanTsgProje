@@ -1,5 +1,5 @@
-﻿
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
+
 <html>
     <body>
         <table>
@@ -13,8 +13,9 @@
                 @foreach (var item in Model)
                 {
                     <tr>
-                        <td><a href="#">@item</a></td>
-                        
+                        @*<td><a href="#" form formmethod="post" >@item.Id</a></td>
+                        <td><a href="#">@item.Name</a></td>*@
+                             <td><a asp-controller="Search" asp-action="PriceSearch" asp-route-CityId="@item.Id" >@item.Name</a></td>
                     </tr>
                     
                 }

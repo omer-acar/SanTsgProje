@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace SanTsgProje.Application.Models
+namespace SanTsgProje.Application.Models.Requests
 {
     public class MailRequest
     {
