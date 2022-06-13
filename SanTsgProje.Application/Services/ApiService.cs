@@ -7,18 +7,19 @@ using SanTsgProje.Domain.Authentications;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace SanTsgProje.Application.Services
 {
-    
-    public class AuthenticationService : IAuthenticationService
+
+    public class ApiService : IApiService
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        public AuthenticationService(IUnitOfWork unitOfWork)
+        public ApiService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
@@ -67,6 +68,19 @@ namespace SanTsgProje.Application.Services
                 return false;
             }
 
+        }
+        public async Task<HttpResponseMessage> Post(object input, string addUrl)
+        {
+            //Token for header from database
+            var tokentype = _unitOfWork.Authentication.GetById();
+            var token = tokentype.Token;
+
+
+            //Post with httpclient
+            var httpclient = new HttpClient();
+            httpclient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            return await httpclient.PostAsJsonAsync("http://service.stage.paximum.com/v2/" + addUrl, input);
         }
 
     }

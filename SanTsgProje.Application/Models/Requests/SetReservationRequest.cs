@@ -15,22 +15,32 @@ namespace SanTsgProje.Application.Models.Requests
 
         public class Traveller
         {
+            public Traveller(string name, string surname, string email)
+            {
+                this.name = name;
+                this.surname = surname;
+                address = new Address
+                {
+                    email = email
+                };
+            }
             public string travellerId { get; set; } = "1";
             public int type { get; set; } = 1;
-            public int title { get; set; }=1;
-            public int passengerType { get; set; }=1;
+            public int title { get; set; } = 1;
+            public int passengerType { get; set; } = 1;
             public string name { get; set; }
             public string surname { get; set; }
             public bool isLeader { get; set; } = true;
             public DateTime birthDate { get; set; } = DateTime.Now;
             public Nationality nationality { get; set; } = new Nationality { twoLetterCode = "DE" };
             public string identityNumber { get; set; } = "";
-            public Passportinfo passportInfo { get; set; }=new Passportinfo 
-            { serial="a",
-              number="13",
-              expireDate = DateTime.MaxValue,
-              issueDate= DateTime.MinValue,
-              citizenshipCountryCode=""
+            public Passportinfo passportInfo { get; set; } = new Passportinfo
+            {
+                serial = "a",
+                number = "13",
+                expireDate = DateTime.MaxValue,
+                issueDate = DateTime.MinValue,
+                citizenshipCountryCode = ""
 
             };
 
@@ -38,18 +48,18 @@ namespace SanTsgProje.Application.Models.Requests
             public Address address { get; set; } = new Address
             {
                 address = "",
-                zipCode ="",
-                
-                contactPhone= new Contactphone
+                zipCode = "",
+
+                contactPhone = new Contactphone
                 {
-                    countryCode="90",
-                    areaCode="555",
-                    phoneNumber= "5555555"
+                    countryCode = "90",
+                    areaCode = "555",
+                    phoneNumber = "5555555"
                 },
-                city=new City
+                city = new City
                 {
-                    id="",
-                    name=""
+                    id = "",
+                    name = ""
                 }
             };
             public Destinationaddress destinationAddress { get; set; } = new Destinationaddress
@@ -57,8 +67,8 @@ namespace SanTsgProje.Application.Models.Requests
 
             };
             public int orderNumber { get; set; } = 1;
-            public object[] documents { get; set; } = new object[] 
-            { 
+            public object[] documents { get; set; } = new object[]
+            {
 
             };
             public object[] insertFields { get; set; } = new object[]

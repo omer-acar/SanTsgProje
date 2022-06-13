@@ -14,34 +14,26 @@ namespace SanTsgProje.Application.Services
 {
     public class BeginTransactionService : IBeginTransactionService
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IApiService _apiService;
 
-        public BeginTransactionService(IUnitOfWork unitOfWork)
+        public BeginTransactionService(IApiService apiService)
         {
-            _unitOfWork = unitOfWork;
+
+            _apiService = apiService;
         }
 
         public async Task<string> BeginTransaction(string OfferId)
         {
-            //Token for header from database
-            var tokentype = _unitOfWork.Authentication.GetById();
-            var token = tokentype.Token;
-
-            //Url for post api
-            var url = "http://service.stage.paximum.com/v2/api/bookingservice/begintransaction";
-            var jsonSerializerOptions = new JsonSerializerOptions()
-            {
-                PropertyNameCaseInsensitive = true,
-            };
-
-            //Post with httpclient
-            var httpClient = new HttpClient();
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            //httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            //Request Json Body
             BeginTransactionRequest productInfoRequest = new BeginTransactionRequest();
             productInfoRequest.offerIds.Add(OfferId);
 
-            var response = await httpClient.PostAsJsonAsync(url, productInfoRequest);
+            //Api Url for post
+            var addurl = "api/bookingservice/begintransaction";
+
+            // Post to Api and Get Response
+            var response = await _apiService.Post(productInfoRequest, addurl);
+
             //If response is success , Select transaction id in json object.
             if (response.IsSuccessStatusCode)
             {

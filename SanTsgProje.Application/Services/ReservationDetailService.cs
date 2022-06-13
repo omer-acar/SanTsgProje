@@ -4,12 +4,6 @@ using SanTsgProje.Application.Models.Requests;
 using SanTsgProje.Application.Models.Responses;
 using SanTsgProje.Data;
 using SanTsgProje.Domain.Reservations;
-using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace SanTsgProje.Application.Services
@@ -17,50 +11,47 @@ namespace SanTsgProje.Application.Services
     public class ReservationDetailService : IReservationDetailService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IApiService _apiService;
 
-        public ReservationDetailService(IUnitOfWork unitOfWork)
+        public ReservationDetailService(IUnitOfWork unitOfWork, IApiService apiService)
         {
             _unitOfWork = unitOfWork;
+            _apiService = apiService;
         }
 
         public async Task<Reservations> SaveReservation(string reservationNumber)
         {
-            Reservations reservations = new Reservations();
-
-            //Token for header from database
-            var tokentype = _unitOfWork.Authentication.GetById();
-            var token = tokentype.Token;
+            //Request Json Body
+            Reservations reservations = null;
+            ReservationDetailRequest reservationDetailRequest = new ReservationDetailRequest() { reservationNumber = reservationNumber };
 
             //Url for post api
-            var url = "http://service.stage.paximum.com/v2/api/bookingservice/getreservationdetail";
-            var jsonSerializerOptions = new JsonSerializerOptions()
-            {
-                PropertyNameCaseInsensitive = true,
-            };
+            var addurl = "api/bookingservice/getreservationdetail";
 
-            //Post with httpclient
-            var httpClient = new HttpClient();
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            //httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            ReservationDetailRequest reservationDetailRequest = new ReservationDetailRequest() { reservationNumber = reservationNumber };
-            var response = await httpClient.PostAsJsonAsync(url, reservationDetailRequest);
+            // Post to Api and Get Response
+            var response = await _apiService.Post(reservationDetailRequest, addurl);
+
             //If response is success set to Reservation details
             if (response.IsSuccessStatusCode)
             {
                 var id = await response.Content.ReadAsStringAsync();
                 ReservationDetailResponse.Rootobject deserializedJson = JsonConvert.DeserializeObject<ReservationDetailResponse.Rootobject>(id);
-                reservations.reservationNumber= deserializedJson.body.reservationNumber;
-                reservations.TotalPrice = deserializedJson.body.reservationData.reservationInfo.totalPrice.amount;
-                reservations.HotelName = deserializedJson.body.reservationData.services[0].name;
-                reservations.Night = deserializedJson.body.reservationData.services[0].serviceDetails.night;
-                reservations.Room = deserializedJson.body.reservationData.services[0].serviceDetails.room;
-                reservations.BeginDate = deserializedJson.body.reservationData.services[0].beginDate;
-                reservations.EndDate = deserializedJson.body.reservationData.services[0].endDate;
-                reservations.Adult= deserializedJson.body.reservationData.services[0].adult;
-                reservations.reservationNumber= deserializedJson.body.reservationData.services[0].code;
-                reservations.TravallerName = deserializedJson.body.reservationData.travellers[0].name;
-                reservations.TravallerSurname = deserializedJson.body.reservationData.travellers[0].surname;
-                reservations.TravallerEmail = deserializedJson.body.reservationData.travellers[0].address.email;
+
+                var resarvationData = deserializedJson.body.reservationData;
+                reservations = new Reservations
+                {
+                    TotalPrice = resarvationData.reservationInfo.totalPrice.amount,
+                    HotelName = resarvationData.services[0].name,
+                    Night = resarvationData.services[0].serviceDetails.night,
+                    Room = resarvationData.services[0].serviceDetails.room,
+                    BeginDate = resarvationData.services[0].beginDate,
+                    EndDate = resarvationData.services[0].endDate,
+                    Adult = resarvationData.services[0].adult,
+                    reservationNumber = resarvationData.services[0].code,
+                    TravallerName = resarvationData.travellers[0].name,
+                    TravallerSurname = resarvationData.travellers[0].surname,
+                    TravallerEmail = resarvationData.travellers[0].address.email
+                };
                 _unitOfWork.ReservationSave.Add(reservations);
                 _unitOfWork.Complete();
             }

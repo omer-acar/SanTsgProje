@@ -44,7 +44,7 @@ namespace SanTsgProje.Web
             services.AddTransient<IUserService, UserService>();
             //Hotel Service
             services.AddTransient<ISearchingService, SearchingService>();
-            services.AddTransient<IAuthenticationService, AuthenticationService>();
+            services.AddTransient<IApiService, ApiService>();
             services.AddTransient<IPriceSearchingService, PriceSearchingService>();
             services.AddTransient<IProductInfoService, ProductInfoService>();
             services.AddTransient<IBeginTransactionService, BeginTransactionService>();

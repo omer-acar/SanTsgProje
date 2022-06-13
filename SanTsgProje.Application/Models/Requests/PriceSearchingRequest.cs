@@ -42,7 +42,7 @@ namespace SanTsgProje.Application.Models.Requests
             };
             public string nationality { get; set; } = "DE";
             public string checkIn { get; set; } = "2023-06-20";
-            public int night { get; set; } = 7;
+            public int night { get; set; } = 1;
             public string currency { get; set; } = "EUR";
             public string culture { get; set; } = "en-US";
         }

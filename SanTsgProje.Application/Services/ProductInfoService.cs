@@ -16,49 +16,41 @@ namespace SanTsgProje.Application.Services
 {
     public class ProductInfoService : IProductInfoService
     {
-        private readonly IUnitOfWork _unitOfWork;
-
-        public ProductInfoService(IUnitOfWork unitOfWork)
+        private readonly IApiService _appService;
+        public ProductInfoService(IApiService appService)
         {
-            _unitOfWork = unitOfWork;
+            _appService = appService;
         }
 
         public async Task<ProductInfo> GetProductInfo(string HotelId, string OfferId)
         {
-            ProductInfo productInfo = new ProductInfo();
-            //Token for header from database
-            var tokentype = _unitOfWork.Authentication.GetById();
-            var token = tokentype.Token;
+            ProductInfo productInfo = null;
 
-            //Url for post api
-            var url = "http://service.stage.paximum.com/v2/api/productservice/getproductInfo";
-            var jsonSerializerOptions = new JsonSerializerOptions()
-            {
-                PropertyNameCaseInsensitive = true,
-            };
+            //Request Json Body
+            ProductInfoRequest productInfoRequest = new ProductInfoRequest() { Product = HotelId };
 
-            //Post with httpclient
-            var httpClient = new HttpClient();
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            //httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            ProductInfoRequest productInfoRequest = new ProductInfoRequest() { Product=HotelId };
+            //Api Url for post
+            var addurl = "api/productservice/getproductInfo";
 
-            var response = await httpClient.PostAsJsonAsync(url, productInfoRequest);
+            // Post to Api and Get Response
+            var response = await _appService.Post(productInfoRequest, addurl);
+
             //If response is success filter for Hotel Details an Price
             if (response.IsSuccessStatusCode)
             {
                 var id = await response.Content.ReadAsStringAsync();
                 ProductInfoResponse.Root deserializedJson = JsonConvert.DeserializeObject<ProductInfoResponse.Root>(id);
-                
-                productInfo.HotelName = deserializedJson.body.hotel.name;
-                productInfo.HotelPic = deserializedJson.body.hotel.thumbnailFull;
-                productInfo.HotelPhone = deserializedJson.body.hotel.phoneNumber;
-                productInfo.HotelWeb = deserializedJson.body.hotel.homePage;
-                productInfo.HotelRate = deserializedJson.body.hotel.stars;
-                productInfo.Description = deserializedJson.body.hotel.description.text;
-                productInfo.OfferId = OfferId;
 
-
+                productInfo = new ProductInfo
+                {
+                    HotelName = deserializedJson.body.hotel.name,
+                    HotelPic = deserializedJson.body.hotel.thumbnailFull,
+                    HotelPhone = deserializedJson.body.hotel.phoneNumber,
+                    HotelWeb = deserializedJson.body.hotel.homePage,
+                    HotelRate = deserializedJson.body.hotel.stars,
+                    Description = deserializedJson.body.hotel.description.text,
+                    OfferId = OfferId
+                };
 
 
 

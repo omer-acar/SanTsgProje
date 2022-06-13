@@ -15,9 +15,9 @@ namespace SanTsgProje.Web.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly ISearchingService _searching;
-        private readonly IAuthenticationService _authentication;
+        private readonly IApiService _authentication;
 
-        public HomeController(ILogger<HomeController> logger, ISearchingService searching, IAuthenticationService authentication)
+        public HomeController(ILogger<HomeController> logger, ISearchingService searching, IApiService authentication)
         {
             _logger = logger;
             _searching = searching;
@@ -41,6 +41,15 @@ namespace SanTsgProje.Web.Controllers
         }
         public async Task<IActionResult> Search(string Query)
         {
+            //try
+            //{
+                
+            //}
+            //catch (Exception e)
+            //{
+
+            //    return View("~/Views/Error/ErrorSearch.cshtml", e.Message);
+            //}
             // Checking Token , If token expired return true or not return false 
             var isTokenExpired = _authentication.IsTokenExpired();
             if (isTokenExpired == true)

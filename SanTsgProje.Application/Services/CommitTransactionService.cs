@@ -12,39 +12,30 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-
 namespace SanTsgProje.Application.Services
 {
     public class CommitTransactionService : ICommitTransactionService
     {
-        private readonly IUnitOfWork _unitOfWork;
 
-        public CommitTransactionService(IUnitOfWork unitOfWork)
+        private readonly IApiService _apiService;
+
+        public CommitTransactionService(IApiService apiService)
         {
-            _unitOfWork = unitOfWork;
+            _apiService = apiService;
         }
 
         public async Task<string> CompleteReservation(string TransactionId)
         {
-            
-            //Token for header from database
-            var tokentype = _unitOfWork.Authentication.GetById();
-            var token = tokentype.Token;
+            //Request Json Body
+            CommitTransactionRequest commitTransactionRequest = new CommitTransactionRequest() { TransactionId = TransactionId };
 
-            //Url for post api
-            var url = "http://service.stage.paximum.com/v2/api/bookingservice/committransaction";
-            var jsonSerializerOptions = new JsonSerializerOptions()
-            {
-                PropertyNameCaseInsensitive = true,
-            };
+            //Api Url for post
+            var addurl = "api/bookingservice/committransaction";
 
-            //Post with httpclient
-            var httpClient = new HttpClient();
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            //httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            CommitTransactionRequest commitTransactionRequest = new CommitTransactionRequest() { TransactionId=TransactionId};
-            var response = await httpClient.PostAsJsonAsync(url, commitTransactionRequest);
-            //If response is success , Select reservation number in Json Object
+            // Post to Api and Get Response
+            var response = await _apiService.Post(commitTransactionRequest,addurl);
+
+
             if (response.IsSuccessStatusCode)
             {
                 var id = await response.Content.ReadAsStringAsync();
@@ -53,7 +44,7 @@ namespace SanTsgProje.Application.Services
                 return reservationNumber;
             }
             return null;
-            
+
         }
     }
 }

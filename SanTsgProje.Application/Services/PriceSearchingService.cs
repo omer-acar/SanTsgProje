@@ -16,51 +16,41 @@ namespace SanTsgProje.Application.Services
 {
     public class PriceSearchingService : IPriceSearchingService
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IApiService _apiService;
 
-
-        public PriceSearchingService(IUnitOfWork unitOfWork)
+        public PriceSearchingService(IApiService apiService)
         {
-            _unitOfWork = unitOfWork;
+            _apiService = apiService;
         }
         public async Task<List<HotelInfos>> PriceSearch(string CityId)
         {
             List<HotelInfos> list = new List<HotelInfos>();
 
-            //Token for header from database
-            var tokentype = _unitOfWork.Authentication.GetById();
-            var token = tokentype.Token;
-
-            //Url for post api
-            var url = "http://service.stage.paximum.com/v2/api/productservice/pricesearch";
-            var jsonSerializerOptions = new JsonSerializerOptions()
-            {
-                PropertyNameCaseInsensitive = true,
-            };
-
-            //Post with httpclient
-            var httpClient = new HttpClient();
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            //httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            //Request Json Body
             PriceSearchingRequest.ArrivalLocation addCityId = new PriceSearchingRequest.ArrivalLocation() { id = CityId };
             PriceSearchingRequest.Root priceSearchingRequest = new PriceSearchingRequest.Root();
             priceSearchingRequest.arrivalLocations.Add(addCityId);
 
-            var response = await httpClient.PostAsJsonAsync(url, priceSearchingRequest);
+            //Api Url for post
+            var addurl = "api/productservice/pricesearch";
+
+            // Post to Api and Get Response
+            var response = await _apiService.Post(priceSearchingRequest, addurl);
+
             //If response is success filter for Hotel Details an Price
             if (response.IsSuccessStatusCode)
             {
                 var id = await response.Content.ReadAsStringAsync();
                 PriceSearchingResponse.Root deserializedJson = JsonConvert.DeserializeObject<PriceSearchingResponse.Root>(id);
-                foreach (var item in deserializedJson.body.hotels)
+                foreach (var hotel in deserializedJson.body.hotels)
                 {
-                    foreach (var item2 in item.offers)
+                    foreach (var offer in hotel.offers)
                     {
-                        list.Add(new HotelInfos(hotelName: item.name, hotelPic: item.thumbnailFull, hotelPrice: item2.price.amount,hotelAdress:item.address,hotelOfferId:item2.offerId,hotelId:item.id));
+                        list.Add(new HotelInfos(hotel.name, hotel.thumbnailFull, offer.price.amount, hotel.address, offer.offerId, hotel.id));
                     }
-                    
+
                 }
-               
+
             }
             return list;
         }
