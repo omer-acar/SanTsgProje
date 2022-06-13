@@ -7,6 +7,6 @@ namespace SanTsgProje.Application.Interfaces
 {
     public interface IBeginTransactionService
     {
-        Task BeginTransaction();
+        Task<string> BeginTransaction(string OfferId);
     }
 }

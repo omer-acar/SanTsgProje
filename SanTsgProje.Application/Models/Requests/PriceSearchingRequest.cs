@@ -14,8 +14,8 @@ namespace SanTsgProje.Application.Models.Requests
 
         public class RoomCriterion
         {
-            public int adult { get; set; } = 2;
-            public List<int> childAges { get; set; } = new List<int>() { 2, 13 };
+            public int adult { get; set; } = 1;
+            //public List<int> childAges { get; set; } = new List<int>() { 2/*, 13*/ };
 
         }
 
@@ -32,13 +32,13 @@ namespace SanTsgProje.Application.Models.Requests
             };
             public List<RoomCriterion> roomCriteria { get; set; } = new List<RoomCriterion>()
             {       
-                new RoomCriterion(),
+                new RoomCriterion()
 
-                new RoomCriterion() {
-                    adult=1,
-                    childAges=new List<int>(){3
-                    }
-                }
+                //new RoomCriterion() {
+                //    adult=1,
+                //    childAges=new List<int>(){3
+                //    }
+                //}
             };
             public string nationality { get; set; } = "DE";
             public string checkIn { get; set; } = "2023-06-20";

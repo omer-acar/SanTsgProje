@@ -4,9 +4,9 @@ using System.Text;
 
 namespace SanTsgProje.Domain.Users
 {
-    public class User
+    public class User 
     {
-       
+       // User Informations
         public int Id { get; set; }
         public string UserName { get; set; }
         public int Password { get; set; }

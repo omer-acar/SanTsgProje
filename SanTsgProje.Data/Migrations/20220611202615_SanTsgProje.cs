@@ -8,6 +8,29 @@ namespace SanTsgProje.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Reservations",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TotalPrice = table.Column<double>(nullable: false),
+                    HotelName = table.Column<string>(nullable: true),
+                    Night = table.Column<int>(nullable: false),
+                    Room = table.Column<string>(nullable: true),
+                    BeginDate = table.Column<DateTime>(nullable: false),
+                    EndDate = table.Column<DateTime>(nullable: false),
+                    Adult = table.Column<int>(nullable: false),
+                    TravallerName = table.Column<string>(nullable: true),
+                    TravallerSurname = table.Column<string>(nullable: true),
+                    TravallerEmail = table.Column<string>(nullable: true),
+                    reservationNumber = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Reservations", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "TokenInfos",
                 columns: table => new
                 {
@@ -42,6 +65,9 @@ namespace SanTsgProje.Data.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Reservations");
+
             migrationBuilder.DropTable(
                 name: "TokenInfos");
 

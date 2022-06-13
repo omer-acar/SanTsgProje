@@ -1,6 +1,9 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using SanTsgProje.Application.Interfaces;
+using SanTsgProje.Application.Models;
 using SanTsgProje.Application.Models.Requests;
+using SanTsgProje.Application.Models.Responses;
 using SanTsgProje.Data;
 using System;
 using System.Collections.Generic;
@@ -12,23 +15,24 @@ using System.Threading.Tasks;
 
 namespace SanTsgProje.Application.Services
 {
-    public class BeginTransactionService : IBeginTransactionService
+    public class CommitTransactionService : ICommitTransactionService
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        public BeginTransactionService(IUnitOfWork unitOfWork)
+        public CommitTransactionService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<string> BeginTransaction(string OfferId)
+        public async Task<string> CompleteReservation(string TransactionId)
         {
+            
             //Token for header from database
             var tokentype = _unitOfWork.Authentication.GetById();
             var token = tokentype.Token;
 
             //Url for post api
-            var url = "http://service.stage.paximum.com/v2/api/bookingservice/begintransaction";
+            var url = "http://service.stage.paximum.com/v2/api/bookingservice/committransaction";
             var jsonSerializerOptions = new JsonSerializerOptions()
             {
                 PropertyNameCaseInsensitive = true,
@@ -38,22 +42,18 @@ namespace SanTsgProje.Application.Services
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             //httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            BeginTransactionRequest productInfoRequest = new BeginTransactionRequest();
-            productInfoRequest.offerIds.Add(OfferId);
-
-            var response = await httpClient.PostAsJsonAsync(url, productInfoRequest);
-            //If response is success , Select transaction id in json object.
+            CommitTransactionRequest commitTransactionRequest = new CommitTransactionRequest() { TransactionId=TransactionId};
+            var response = await httpClient.PostAsJsonAsync(url, commitTransactionRequest);
+            //If response is success , Select reservation number in Json Object
             if (response.IsSuccessStatusCode)
             {
                 var id = await response.Content.ReadAsStringAsync();
                 JObject json = JObject.Parse(id);
-                var transactionId = json.SelectToken("body.transactionId").Value<string>();
-                return transactionId;
-
+                var reservationNumber = json.SelectToken("body.reservationNumber").Value<string>();
+                return reservationNumber;
             }
-
             return null;
+            
         }
-    
     }
 }

@@ -186,8 +186,7 @@ span{
                 <div class="table-title">
                     <div class="row">
                         <div class="col-sm-5">
-                            <h2> <b>@Model.HotelName</b></h2>
-                            <h2> Rate : <b>@Model.HotelRate / 5 </b></h2>
+                            <h2> <b>Hotel Reservation Details</b></h2>
                         </div>
 @*                        <div class="col-sm-7">
                             <a asp-controller="User" asp-action="Create" class="btn btn-secondary"><i class="material-icons">&#xE147;</i> <span>Add New User</span></a>
@@ -197,61 +196,33 @@ span{
                 <table class="table table-striped table-hover">
                     <thead>
                         <tr>
-                            <th>@Model.HotelName Informations</th>
+                            
+                            <th><h1>Congratulations... your reservation number @Model.reservationNumber has been successfully completed.</h1></th>
                         </tr>
                     </thead>
                     <tbody>
 
                                     
-                                    <tr><td><img src=@Model.HotelPic></td></tr>
-                                    <tr><td>
-                                        <h3>Hotel Description</h3>
-                                        @Model.Description
-                                        </td></tr>
-                                    
-                                    <tr><td>Hotel Phone Number : @Model.HotelPhone </td></tr>
-                                    <tr><td>Hotel Web Site : @Model.HotelWeb </td></tr>
+                                    <tr><td>Hotel İsmi : @Model.HotelName</td></tr>
                                     <tr>
-                                        <td>
-                                        <h3>Hotel Facility</h3>
-                                @foreach (var item in Model.HotelFacility)
-                                {
-                                    <span>@item</span>  
-                                }
-                                        </td>
+                                        <td>Adult : @Model.Adult</td>
+                                        <td>Night : @Model.Night</td>
+                                        <td>RoomType : @Model.Room</td>
+                                    </tr>
+                                    <tr>
+                                        <td>BeginDate : @Model.BeginDate </td>
+                                        <td>EndeDate : @Model.EndDate </td>
                                     </tr>
 
                                     <tr>
-                                        <td>
-                                        <div class="box">
-                                            <a href="#divOne" class="button">Book Now</a>
-                                        </div>
-                                        <div class="overlay" id="divOne">
-                                            <div class="wrapper">
-                                                <h2>Please Fill up the Form for booking</h2>
-                                                <a href="#" class="close">&times;</a>
-                                                <div class="book"> 
-                                                    <div class="container">
-                                                        <form asp-action="Booking" asp-controller="Booking" asp-route-OfferId="@Model.OfferId">
-                                                            <label>First Name</label>
-                                                            <input type="text" name="FirstName" placeholder="Fist Name" />   
-                                                            <label>Last Name</label>
-                                                            <input type="text" name="LastName" placeholder="Last Name" /> 
-                                                            <label>Email</label>
-                                                            <input type="text" name="Email" placeholder="Email" />
-                                                            <input type="submit" value="submit" />
-                                                        </form>
-                                                    </div>
-                                                </div>        
-
-                                            </div>
-
-                                        </div>
-                                        @*<a asp-controller="Search" asp-action="GetProductInfo" asp-route-OfferId="@Model.OfferId">Book Now</a>*@ 
-                                        </td>
+                                        <td>Traveller Name :@Model.TravallerName  </td>
+                                        <td>Traveller LastName :@Model.TravallerSurname  </td>
+                                        <td>Traveller Mail : @Model.TravallerEmail </td>
                                     </tr>
+                                    <tr> <td>Total Price : @Model.TotalPrice </td></tr>
+                                    <tr><td><a asp-controller="Booking" asp-action="Index">Check Reservations</a> </td></tr>
+    
 
-                            
                     </tbody>
                 </table>
                 <div></div>

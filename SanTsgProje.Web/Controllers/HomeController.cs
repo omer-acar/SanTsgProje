@@ -41,18 +41,22 @@ namespace SanTsgProje.Web.Controllers
         }
         public async Task<IActionResult> Search(string Query)
         {
+            // Checking Token , If token expired return true or not return false 
             var isTokenExpired = _authentication.IsTokenExpired();
             if (isTokenExpired == true)
             {
                 await _authentication.Authentication();
+                // Find City with Query
                 var result = await _searching.SearchCities(Query);
+                // Show Cities
                 return View(result);
 
             }
             else if (isTokenExpired == false)
             {
+                // Find City with Query
                 var result = await _searching.SearchCities(Query);
-
+                // Show Cities
                 return View(result);
             }
             return View();

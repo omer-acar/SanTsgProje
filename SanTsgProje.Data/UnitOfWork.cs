@@ -10,6 +10,7 @@ namespace SanTsgProje.Data
     {
         public IUserRepository User { get; }
         public IAuthenticationRepository Authentication { get; }
+        public IReservationSaveRepository ReservationSave { get; }
         void Complete();
         void Dispose();
     }
@@ -19,6 +20,9 @@ namespace SanTsgProje.Data
 
         public IUserRepository User { get; private set; }
         public IAuthenticationRepository Authentication { get; private set; }
+        public IReservationSaveRepository ReservationSave { get; private set; }
+
+
 
         public UnitOfWork(ProjeDbContext context)
         {
@@ -26,6 +30,7 @@ namespace SanTsgProje.Data
 
             User = new UserRepository(context);
             Authentication = new AuthenticationRepository(context);
+            ReservationSave = new ReservationSaveRepository(context);
         }
 
         public void Complete()

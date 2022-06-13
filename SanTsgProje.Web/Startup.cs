@@ -34,18 +34,24 @@ namespace SanTsgProje.Web
             services.AddControllersWithViews();
             services.AddDbContext<ProjeDbContext>(options =>
              options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            //Email Settings and Email Service
             services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
             services.AddScoped<IEmailService, EmailService>();
-
+            // Unit Of work
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-
+            //User Service
             services.AddTransient<IUserService, UserService>();
+            //Hotel Service
             services.AddTransient<ISearchingService, SearchingService>();
             services.AddTransient<IAuthenticationService, AuthenticationService>();
             services.AddTransient<IPriceSearchingService, PriceSearchingService>();
             services.AddTransient<IProductInfoService, ProductInfoService>();
             services.AddTransient<IBeginTransactionService, BeginTransactionService>();
+            services.AddTransient<ISetReservationService, SetReservationService>();
+            services.AddTransient<ICommitTransactionService, CommitTransactionService>();
+            services.AddTransient<IReservationDetailService, ReservationDetailService>();
+            services.AddTransient<IBookingService, BookingService>();
 
 
             //services.AddScoped(typeof(IRepository<>), typeof(Repository<>));

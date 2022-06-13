@@ -10,7 +10,7 @@ using SanTsgProje.Data;
 namespace SanTsgProje.Data.Migrations
 {
     [DbContext(typeof(ProjeDbContext))]
-    [Migration("20220609080809_SanTsgProje")]
+    [Migration("20220611202615_SanTsgProje")]
     partial class SanTsgProje
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -40,6 +40,51 @@ namespace SanTsgProje.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("TokenInfos");
+                });
+
+            modelBuilder.Entity("SanTsgProje.Domain.Reservations.Reservations", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Adult")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("BeginDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("HotelName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Night")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Room")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("TotalPrice")
+                        .HasColumnType("float");
+
+                    b.Property<string>("TravallerEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TravallerName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TravallerSurname")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("reservationNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Reservations");
                 });
 
             modelBuilder.Entity("SanTsgProje.Domain.Users.User", b =>
